@@ -17,7 +17,7 @@ pub struct CommandParse {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    /// bactgraph
+    /// Classify a single population
     Classifier {
         /// inputfile
         filepathinput: String,
@@ -26,7 +26,7 @@ pub enum Commands {
         /// genotype prediction
         genotypeinput: String,
     },
-    /// filter and classify the variants on the specific variant types
+    /// filter and classify the variants on the specific variant types for a single population
     VariantClassifier {
         /// file to be used
         fileinput: String,
@@ -36,5 +36,25 @@ pub enum Commands {
         qualityvalueinput: String,
         /// genotype prediction
         genotypepathinput: String,
+    },
+    /// Classify on an entire population
+    Population {
+        /// input directory
+        directoryinput: String,
+        /// qualityinput
+        qualityinput: String,
+        /// genotype prediction
+        genotypeinput: String,
+    },
+    /// Classify an entire population over a specific variant
+    PopulationVariant {
+        /// input directory
+        directoryinput: String,
+        /// variant to be filtered
+        variantinput: String,
+        /// quality value input
+        qualityvalue: String,
+        /// genotype prediction
+        genotypeprediction: String,
     },
 }
