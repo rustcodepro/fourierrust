@@ -7,5 +7,24 @@
 cargo build
 ```
 
+```
+classification for variant annotation.
+       ************************************************
+       Gaurav Sablok,
+       Email: codeprog@icloud.com
+      ************************************************
+
+Usage: egraph <COMMAND>
+
+Commands:
+  classifier          bactgraph
+  variant-classifier  filter and classify the variants on the specific variant types
+  help                Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+```
+
 Gaurav Sablok \
 codeprog@icloud.com

@@ -3,7 +3,7 @@ use clap::{Parser, Subcommand};
 #[command(
     name = "egraph",
     version = "1.0",
-    about = "autoencoder for variant annotation.
+    about = "classification for variant annotation.
        ************************************************
        Gaurav Sablok,
        Email: codeprog@icloud.com
