@@ -25,6 +25,8 @@ pub enum Commands {
         qualityinput: String,
         /// genotype prediction
         genotypeinput: String,
+        /// thread for the analysis
+        thread: String,
     },
     /// filter and classify the variants on the specific variant types for a single population
     VariantClassifier {
@@ -36,6 +38,8 @@ pub enum Commands {
         qualityvalueinput: String,
         /// genotype prediction
         genotypepathinput: String,
+        /// thread for the analysis
+        thread: String,
     },
     /// Classify on an entire population
     Population {
@@ -45,6 +49,8 @@ pub enum Commands {
         qualityinput: String,
         /// genotype prediction
         genotypeinput: String,
+        /// thread for the analysis
+        thread: String,
     },
     /// Classify an entire population over a specific variant
     PopulationVariant {
@@ -56,5 +62,7 @@ pub enum Commands {
         qualityvalue: String,
         /// genotype prediction
         genotypeprediction: String,
+        /// thread for the analysis
+        thread: String,
     },
 }

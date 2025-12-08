@@ -16,113 +16,143 @@ use crate::egraphpop::popknnclassification;
 use crate::egraphpop::poplogisticclassification;
 use crate::egraphpop::poprandomforestclassification;
 use clap::Parser;
+use figlet_rs::FIGfont;
 
 /*
 Gaurav Sablok
 codeprog@icloud.com
-- a smartcore implementation of the node clustering where you ahve the defined
-- nodes and you have the weights defined. It will estimate teh features from the
-- provided nodes file and then will use the weights to implement the cluster.
 */
 
 fn main() {
+    let fontgenerate = FIGfont::standard().unwrap();
+    let repgenerate = fontgenerate.convert("eGRAPH");
+    println!("{}", repgenerate.unwrap());
     let argparse = CommandParse::parse();
     match &argparse.command {
         Commands::Classifier {
             filepathinput,
             qualityinput,
             genotypeinput,
+            thread,
         } => {
-            let command_logistic =
-                logisticclassification(filepathinput, qualityinput, genotypeinput).unwrap();
-            let command_knn =
-                knnclassification(filepathinput, qualityinput, genotypeinput).unwrap();
-            let command_random =
-                randomforestclassification(filepathinput, qualityinput, genotypeinput).unwrap();
-            println!(
-                "The commands have been finished:{}\n{}\n{}\n",
-                command_logistic, command_knn, command_random
-            );
+            let pool = rayon::ThreadPoolBuilder::new()
+                .num_threads(thread.parse::<usize>().unwrap())
+                .build()
+                .unwrap();
+            pool.install(|| {
+                let command_logistic =
+                    logisticclassification(filepathinput, qualityinput, genotypeinput).unwrap();
+                let command_knn =
+                    knnclassification(filepathinput, qualityinput, genotypeinput).unwrap();
+                let command_random =
+                    randomforestclassification(filepathinput, qualityinput, genotypeinput).unwrap();
+                println!(
+                    "The commands have been finished:{}\n{}\n{}\n",
+                    command_logistic, command_knn, command_random
+                );
+            });
         }
         Commands::VariantClassifier {
             variantinput,
             qualityvalueinput,
             fileinput,
             genotypepathinput,
+            thread,
         } => {
-            let command_knn = variantclasslabel_knn(
-                fileinput,
-                variantinput,
-                qualityvalueinput,
-                genotypepathinput,
-            )
-            .unwrap();
-            let command_logistic = variantclasslabel_logistic(
-                fileinput,
-                variantinput,
-                qualityvalueinput,
-                genotypepathinput,
-            )
-            .unwrap();
-            let command_random = variantclasslabel_random(
-                fileinput,
-                variantinput,
-                qualityvalueinput,
-                genotypepathinput,
-            )
-            .unwrap();
-            println!(
-                "The commands have been finished:{}\n{}\n{}\n",
-                command_knn, command_logistic, command_random
-            );
+            let pool = rayon::ThreadPoolBuilder::new()
+                .num_threads(thread.parse::<usize>().unwrap())
+                .build()
+                .unwrap();
+            pool.install(|| {
+                let command_knn = variantclasslabel_knn(
+                    fileinput,
+                    variantinput,
+                    qualityvalueinput,
+                    genotypepathinput,
+                )
+                .unwrap();
+                let command_logistic = variantclasslabel_logistic(
+                    fileinput,
+                    variantinput,
+                    qualityvalueinput,
+                    genotypepathinput,
+                )
+                .unwrap();
+                let command_random = variantclasslabel_random(
+                    fileinput,
+                    variantinput,
+                    qualityvalueinput,
+                    genotypepathinput,
+                )
+                .unwrap();
+                println!(
+                    "The commands have been finished:{}\n{}\n{}\n",
+                    command_knn, command_logistic, command_random
+                );
+            });
         }
         Commands::PopulationVariant {
             directoryinput,
             variantinput,
             qualityvalue,
             genotypeprediction,
+            thread,
         } => {
-            let command_knn = pop_knn(
-                directoryinput,
-                variantinput,
-                qualityvalue,
-                genotypeprediction,
-            )
-            .unwrap();
-            let command_log = pop_logistic(
-                directoryinput,
-                variantinput,
-                qualityvalue,
-                genotypeprediction,
-            )
-            .unwrap();
-            let command_random = pop_random(
-                directoryinput,
-                variantinput,
-                qualityvalue,
-                genotypeprediction,
-            )
-            .unwrap();
-            println!(
-                "The command for the all classifier have been finished:{}\t{}\t{}\n",
-                command_knn, command_log, command_random
-            );
+            let pool = rayon::ThreadPoolBuilder::new()
+                .num_threads(thread.parse::<usize>().unwrap())
+                .build()
+                .unwrap();
+            pool.install(|| {
+                let command_knn = pop_knn(
+                    directoryinput,
+                    variantinput,
+                    qualityvalue,
+                    genotypeprediction,
+                )
+                .unwrap();
+                let command_log = pop_logistic(
+                    directoryinput,
+                    variantinput,
+                    qualityvalue,
+                    genotypeprediction,
+                )
+                .unwrap();
+                let command_random = pop_random(
+                    directoryinput,
+                    variantinput,
+                    qualityvalue,
+                    genotypeprediction,
+                )
+                .unwrap();
+                println!(
+                    "The command for the all classifier have been finished:{}\t{}\t{}\n",
+                    command_knn, command_log, command_random
+                );
+            });
         }
         Commands::Population {
             directoryinput,
             qualityinput,
             genotypeinput,
+            thread,
         } => {
-            let command_log =
-                poplogisticclassification(directoryinput, qualityinput, genotypeinput).unwrap();
-            let command_knn =
-                popknnclassification(directoryinput, qualityinput, genotypeinput).unwrap();
-            let command_random =
-                poprandomforestclassification(directoryinput, qualityinput, genotypeinput).unwrap();
-            println!(
-                "The population variant classification has been trained:{}\t{}\t{}\n",
-                command_log, command_knn, command_random
-            );
+            let pool = rayon::ThreadPoolBuilder::new()
+                .num_threads(thread.parse::<usize>().unwrap())
+                .build()
+                .unwrap();
+            pool.install(|| {
+                let command_log =
+                    poplogisticclassification(directoryinput, qualityinput, genotypeinput).unwrap();
+                let command_knn =
+                    popknnclassification(directoryinput, qualityinput, genotypeinput).unwrap();
+                let command_random =
+                    poprandomforestclassification(directoryinput, qualityinput, genotypeinput)
+                        .unwrap();
+                println!(
+                    "The population variant classification has been trained:{}\t{}\t{}\n",
+                    command_log, command_knn, command_random
+                );
+            });
         }
     }
 }

@@ -20,8 +20,9 @@ codeprog@icloud.com
 #[derive(Debug, Clone, PartialOrd, PartialEq)]
 pub struct AutoencoderData {
     pub nameallele: String,
-    pub gentoype: f64,
-    pub quality: f64,
+    pub gentoype_54: f64,
+    pub quality_55: f64,
+    pub ro_number: f64,
 }
 
 type EGRAPHTYPE = Vec<AutoencoderData>;
@@ -45,9 +46,9 @@ pub fn readdata(path: &str) -> Result<DIRETURN, Box<dyn std::error::Error>> {
             let linevec = line.split("\t").collect::<Vec<_>>();
             let mutabletuple: (String, String, f64, f64) = (
                 linevec[4].to_string(),
-                linevec[55].to_string(),
-                linevec[53].parse::<f64>().unwrap(),
-                linevec[54].parse::<f64>().unwrap(),
+                linevec[54].to_string(),
+                linevec[55].parse::<f64>().unwrap(),
+                linevec[58].parse::<f64>().unwrap(),
             );
             returnvector.push(mutabletuple);
         }
@@ -66,8 +67,9 @@ pub fn readdir_tensor(pathfile: &str) -> Result<EGRAPHTYPE, Box<dyn Error>> {
         if i.1 == "pass" {
             tensorvec.push(AutoencoderData {
                 nameallele: i.0.to_string().clone(),
-                gentoype: i.2.clone(),
-                quality: i.3.clone(),
+                gentoype_54: i.2,
+                quality_55: i.3,
+                ro_number: i.3,
             });
         }
     }
@@ -95,12 +97,12 @@ pub fn poplogisticclassification(
     let mut vecgenotype: Vec<Vec<f64>> = Vec::new();
     let mut classlabels: Vec<i32> = Vec::new();
     for i in inputvariable.iter() {
-        if i.quality < quality.parse::<f64>().unwrap() {
-            classlabels.push(0 as i32);
-        } else if i.quality > quality.parse::<f64>().unwrap() {
-            classlabels.push(1 as i32);
+        if i.quality_55 < quality.parse::<f64>().unwrap() {
+            classlabels.push(0);
+        } else if i.quality_55 > quality.parse::<f64>().unwrap() {
+            classlabels.push(1);
         }
-        vecgenotype.push(vec![i.gentoype as f64]);
+        vecgenotype.push(vec![i.gentoype_54, i.quality_55, i.ro_number]);
     }
     let featurevalue = DenseMatrix::from_2d_vec(&vecgenotype).unwrap();
     let model = LogisticRegression::fit(&featurevalue, &classlabels, Default::default()).unwrap();
@@ -131,12 +133,12 @@ pub fn popknnclassification(
     let mut vecgenotype: Vec<Vec<f64>> = Vec::new();
     let mut classlabels: Vec<i32> = Vec::new();
     for i in inputvariable.iter() {
-        if i.quality < quality.parse::<f64>().unwrap() {
-            classlabels.push(0 as i32);
-        } else if i.quality > quality.parse::<f64>().unwrap() {
-            classlabels.push(1 as i32);
+        if i.quality_55 < quality.parse::<f64>().unwrap() {
+            classlabels.push(0);
+        } else if i.quality_55 > quality.parse::<f64>().unwrap() {
+            classlabels.push(1);
         }
-        vecgenotype.push(vec![i.gentoype as f64]);
+        vecgenotype.push(vec![i.gentoype_54, i.quality_55, i.ro_number]);
     }
     let featurevalue = DenseMatrix::from_2d_vec(&vecgenotype).unwrap();
     let model = KNNClassifier::fit(&featurevalue, &classlabels, Default::default()).unwrap();
@@ -167,12 +169,12 @@ pub fn poprandomforestclassification(
     let mut vecgenotype: Vec<Vec<f64>> = Vec::new();
     let mut classlabels: Vec<i32> = Vec::new();
     for i in inputvariable.iter() {
-        if i.quality < quality.parse::<f64>().unwrap() {
-            classlabels.push(0 as i32);
-        } else if i.quality > quality.parse::<f64>().unwrap() {
-            classlabels.push(1 as i32);
+        if i.quality_55 < quality.parse::<f64>().unwrap() {
+            classlabels.push(0);
+        } else if i.quality_55 > quality.parse::<f64>().unwrap() {
+            classlabels.push(1);
         }
-        vecgenotype.push(vec![i.gentoype as f64]);
+        vecgenotype.push(vec![i.gentoype_54, i.quality_55, i.ro_number]);
     }
     let featurevalue = DenseMatrix::from_2d_vec(&vecgenotype).unwrap();
     let model =
@@ -205,12 +207,12 @@ pub fn pop_logistic(
     let mut vecgenotype: Vec<Vec<f64>> = Vec::new();
     let mut classlabels: Vec<i32> = Vec::new();
     for i in inputvariable.iter() {
-        if i.nameallele == variant && i.quality < quality.parse::<f64>().unwrap() {
-            classlabels.push(0 as i32);
-        } else if i.quality > quality.parse::<f64>().unwrap() {
-            classlabels.push(1 as i32);
+        if i.nameallele == variant && i.quality_55 < quality.parse::<f64>().unwrap() {
+            classlabels.push(0);
+        } else if i.quality_55 > quality.parse::<f64>().unwrap() {
+            classlabels.push(1);
         }
-        vecgenotype.push(vec![i.gentoype as f64]);
+        vecgenotype.push(vec![i.gentoype_54, i.quality_55, i.ro_number]);
     }
     let featurevalue = DenseMatrix::from_2d_vec(&vecgenotype).unwrap();
     let model = LogisticRegression::fit(&featurevalue, &classlabels, Default::default()).unwrap();
@@ -242,12 +244,12 @@ pub fn pop_knn(
     let mut vecgenotype: Vec<Vec<f64>> = Vec::new();
     let mut classlabels: Vec<i32> = Vec::new();
     for i in inputvariable.iter() {
-        if i.nameallele == variant && i.quality < quality.parse::<f64>().unwrap() {
-            classlabels.push(0 as i32);
-        } else if i.quality > quality.parse::<f64>().unwrap() {
-            classlabels.push(1 as i32);
+        if i.nameallele == variant && i.quality_55 < quality.parse::<f64>().unwrap() {
+            classlabels.push(0);
+        } else if i.quality_55 > quality.parse::<f64>().unwrap() {
+            classlabels.push(1);
         }
-        vecgenotype.push(vec![i.gentoype as f64]);
+        vecgenotype.push(vec![i.gentoype_54, i.quality_55, i.ro_number]);
     }
     let featurevalue = DenseMatrix::from_2d_vec(&vecgenotype).unwrap();
     let model = KNNClassifier::fit(&featurevalue, &classlabels, Default::default()).unwrap();
@@ -279,12 +281,12 @@ pub fn pop_random(
     let mut vecgenotype: Vec<Vec<f64>> = Vec::new();
     let mut classlabels: Vec<i32> = Vec::new();
     for i in inputvariable.iter() {
-        if i.nameallele == variant && i.quality < quality.parse::<f64>().unwrap() {
-            classlabels.push(0 as i32);
-        } else if i.quality > quality.parse::<f64>().unwrap() {
-            classlabels.push(1 as i32);
+        if i.nameallele == variant && i.quality_55 < quality.parse::<f64>().unwrap() {
+            classlabels.push(0);
+        } else if i.quality_55 > quality.parse::<f64>().unwrap() {
+            classlabels.push(1);
         }
-        vecgenotype.push(vec![i.gentoype as f64]);
+        vecgenotype.push(vec![i.gentoype_54, i.quality_55, i.ro_number]);
     }
     let featurevalue = DenseMatrix::from_2d_vec(&vecgenotype).unwrap();
     let model =
