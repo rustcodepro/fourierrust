@@ -2,6 +2,10 @@
 name = "egraph"
 version = "0.1.0"
 edition = "2024"
+authors = ["Gaurav Sablok <codeprog@icloud.com>"]
+description = "egraph for variant machine learning"
+homepage = "https://github.com/rustcodepro/egraph"
+repository = "https://github.com/rustcodepro/egraph"
 
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
